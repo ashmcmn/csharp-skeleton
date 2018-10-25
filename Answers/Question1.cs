@@ -11,14 +11,17 @@ namespace C_Sharp_Challenge_Skeleton.Answers
     {
         public static int Answer(int[] portfolios)
         {
-            int maxValue = 0;
-            for (int i = 0; i < portfolios.Length; i++)
+            var maxValue = 0;
+            for (var i = 0; i < portfolios.Length; i++)
             {
-                for (int j = 0; j < portfolios.Length; j++)
+                for (var j = 0; j < portfolios.Length; j++)
                 {
-                    if (MergePortfolio(portfolios[i], portfolios[j]) > maxValue)
+                    if (i != j)
                     {
-                        MergePortfolio(portfolios[i], portfolios[j]);
+                        if (MergePortfolio(portfolios[i], portfolios[j]) > maxValue)
+                        {
+                            maxValue = MergePortfolio(portfolios[i], portfolios[j]);
+                        }
                     }
                 }
             }
@@ -28,10 +31,10 @@ namespace C_Sharp_Challenge_Skeleton.Answers
 
         private static int MergePortfolio(int p0, int p1)
         {
-            string b0 = Convert.ToString(p0, 2);
-            string b1 = Convert.ToString(p1, 2);
-            string merged = "";
-            for (int i = 0; i < 16; i++)
+            var b0 = Convert.ToString(p0, 2).PadLeft(16, '0');
+            var b1 = Convert.ToString(p1, 2).PadLeft(16, '0');
+            var merged = "";
+            for (var i = 0; i < b0.Length; i++)
             {
                 if (b0[i] == '0' && b1[i] == '0')
                 {
@@ -46,7 +49,6 @@ namespace C_Sharp_Challenge_Skeleton.Answers
                     merged += '0';
                 }
             }
-
             return Convert.ToInt32(merged, 2);
         }
     }
