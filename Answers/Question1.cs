@@ -16,40 +16,15 @@ namespace C_Sharp_Challenge_Skeleton.Answers
             {
                 for (var j = 0; j < portfolios.Length; j++)
                 {
-                    if (i != j)
+                    int xor = portfolios[i] ^ portfolios[j];
+                    if (xor > maxValue)
                     {
-                        if (MergePortfolio(portfolios[i], portfolios[j]) > maxValue)
-                        {
-                            maxValue = MergePortfolio(portfolios[i], portfolios[j]);
-                        }
+                        maxValue = xor;
                     }
                 }
             }
 
             return maxValue;
-        }
-
-        private static int MergePortfolio(int p0, int p1)
-        {
-            var b0 = Convert.ToString(p0, 2).PadLeft(16, '0');
-            var b1 = Convert.ToString(p1, 2).PadLeft(16, '0');
-            var merged = "";
-            for (var i = 0; i < b0.Length; i++)
-            {
-                if (b0[i] == '0' && b1[i] == '0')
-                {
-                    merged += '0';
-                }
-                else if (b0[i] == '1' ^ b1[i] == '1')
-                {
-                    merged += 1;
-                }
-                else
-                {
-                    merged += '0';
-                }
-            }
-            return Convert.ToInt32(merged, 2);
         }
     }
 }
