@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace C_Sharp_Challenge_Skeleton.Answers
@@ -7,27 +8,46 @@ namespace C_Sharp_Challenge_Skeleton.Answers
     {
         public static int Answer(int[] cashflowIn, int[] cashflowOut)
         {
-            return (FindMin(cashflowIn.Concat(cashflowOut).ToArray())-1);
+            List<IEnumerable<int>> inSets = Subsets(cashflowIn.ToList()).Where(x => x.Count() != 0).ToList();
+            List<IEnumerable<int>> outSets = Subsets(cashflowOut.ToList()).Where(x => x.Count() != 0).ToList();
+            
+            int minDiff = Math.Abs(inSets.ElementAt(0).Sum() - outSets.ElementAt(0).Sum());
+            
+            foreach (var set in inSets)
+            {
+                foreach (var set2 in outSets)
+                {
+                    if (Math.Abs(set.Sum() - set2.Sum()) < minDiff)
+                    {
+                        minDiff = Math.Abs(set.Sum() - set2.Sum());
+                        
+                    }
+                }
+            }
+
+            return minDiff;
         }
-
-        static int FindMinRec(int[] arr, int i, int sumCalculated, int sumTotal) 
-        { 
-
-            if (i==0) 
-                return Math.Abs((sumTotal-sumCalculated) - sumCalculated); 
-  
-            return Math.Min(FindMinRec(arr, i-1, sumCalculated+arr[i-1], sumTotal), 
-                FindMinRec(arr, i-1, sumCalculated, sumTotal)); 
-        } 
-  
-        static int FindMin(int[] arr)
+        
+        public static IEnumerable<IEnumerable<T>> Subsets<T>(IEnumerable<T> source)
         {
-            var n = arr.Length;
-            var sumTotal = 0; 
-            for (var i=0; i<n; i++) 
-                sumTotal += arr[i]; 
-  
-            return FindMinRec(arr, n, 0, sumTotal); 
-        } 
+            List<T> list = source.ToList();
+            int length = list.Count;
+            int max = (int)Math.Pow(2, list.Count);
+
+            for (int count = 0; count < max; count++)
+            {
+                List<T> subset = new List<T>();
+                uint rs = 0;
+                while (rs < length)
+                {
+                    if ((count & (1u << (int)rs)) > 0)
+                    {
+                        subset.Add(list[(int)rs]);
+                    }
+                    rs++;
+                }
+                yield return subset;
+            }
+        }
     }
 }
